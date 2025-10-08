@@ -12,17 +12,15 @@ public class SkillExchangeRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer requestId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    // store IDs instead of entity relations to avoid missing-type errors
+    @Column(name = "sender_id", nullable = false)
+    private Integer senderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private User receiver;
+    @Column(name = "receiver_id", nullable = false)
+    private Integer receiverId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "skill_id", nullable = false)
-    private Skill skill;
+    @Column(name = "skill_id", nullable = false)
+    private Integer skillId;
 
     @Column(length = 255)
     private String message;
@@ -43,18 +41,18 @@ public class SkillExchangeRequest {
     public SkillExchangeRequest() { }
 
     public SkillExchangeRequest(Integer requestId,
-                                User sender,
-                                User receiver,
-                                Skill skill,
+                                Integer senderId,
+                                Integer receiverId,
+                                Integer skillId,
                                 String message,
                                 String availability,
                                 String sessionDuration,
                                 RequestStatus status,
                                 Instant requestedAt) {
         this.requestId = requestId;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.skill = skill;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.skillId = skillId;
         this.message = message;
         this.availability = availability;
         this.sessionDuration = sessionDuration;
@@ -70,28 +68,28 @@ public class SkillExchangeRequest {
         this.requestId = requestId;
     }
 
-    public User getSender() {
-        return sender;
+    public Integer getSenderId() {
+        return senderId;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSenderId(Integer senderId) {
+        this.senderId = senderId;
     }
 
-    public User getReceiver() {
-        return receiver;
+    public Integer getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setReceiverId(Integer receiverId) {
+        this.receiverId = receiverId;
     }
 
-    public Skill getSkill() {
-        return skill;
+    public Integer getSkillId() {
+        return skillId;
     }
 
-    public void setSkill(Skill skill) {
-        this.skill = skill;
+    public void setSkillId(Integer skillId) {
+        this.skillId = skillId;
     }
 
     public String getMessage() {
@@ -149,9 +147,6 @@ public class SkillExchangeRequest {
 
     @Override
     public String toString() {
-        Integer senderId = sender != null ? sender.getUserId() : null;
-        Integer receiverId = receiver != null ? receiver.getUserId() : null;
-        Integer skillId = skill != null ? skill.getSkillId() : null;
         return "SkillExchangeRequest{" +
                 "requestId=" + requestId +
                 ", senderId=" + senderId +
@@ -163,5 +158,13 @@ public class SkillExchangeRequest {
                 ", status=" + status +
                 ", requestedAt=" + requestedAt +
                 '}';
+    }
+
+    // simple enum included here to avoid external dependency
+    public enum RequestStatus {
+        PENDING,
+        ACCEPTED,
+        REJECTED,
+        CANCELLED
     }
 }
