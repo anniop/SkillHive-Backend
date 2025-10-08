@@ -1,53 +1,53 @@
 package com.amdocs.skillhive.controller;
 
+import com.amdocs.skillhive.model.Skill;
+import com.amdocs.skillhive.service.SkillService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/skills")
 public class SkillController {
-	private final Map<UUID, Map<String, Object>> store = new ConcurrentHashMap<>();
 
-	@GetMapping
-	public Collection<Map<String, Object>> list() {
-		return store.values();
-	}
+    @Autowired
+    private SkillService skillService;
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Map<String, Object>> get(@PathVariable UUID id) {
-		Map<String, Object> v = store.get(id);
-		if (v == null) return ResponseEntity.notFound().build();
-		return ResponseEntity.ok(v);
-	}
+    // ✅ Get all skills
+    @GetMapping
+    public ResponseEntity<List<Skill>> getAllSkills() {
+        List<Skill> skills = skillService.getAllSkills();
+        return ResponseEntity.ok(skills);
+    }
 
-	@PostMapping
-	public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> payload) {
-		UUID id = UUID.randomUUID();
-		Map<String, Object> entry = new HashMap<>(payload != null ? payload : Collections.emptyMap());
-		entry.put("id", id.toString());
-		store.put(id, entry);
-		return ResponseEntity.status(HttpStatus.CREATED).body(entry);
-	}
+    // ✅ Get skill by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Skill> getSkillById(@PathVariable Integer id) {
+        Skill skill = skillService.getSkillById(id);
+        return ResponseEntity.ok(skill);
+    }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Map<String, Object>> update(@PathVariable UUID id, @RequestBody Map<String, Object> payload) {
-		Map<String, Object> existing = store.get(id);
-		if (existing == null) return ResponseEntity.notFound().build();
-		if (payload != null) {
-			payload.forEach((k, v) -> {
-				if (!"id".equals(k)) existing.put(k, v);
-			});
-		}
-		return ResponseEntity.ok(existing);
-	}
+    // ✅ Create a new skill
+    @PostMapping
+    public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) {
+        Skill created = skillService.createSkill(skill);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable UUID id) {
-		store.remove(id);
-		return ResponseEntity.noContent().build();
-	}
+    // ✅ Update an existing skill
+    @PutMapping("/{id}")
+    public ResponseEntity<Skill> updateSkill(@PathVariable Integer id, @RequestBody Skill skill) {
+        Skill updated = skillService.updateSkill(id, skill);
+        return ResponseEntity.ok(updated);
+    }
+
+    // ✅ Delete a skill
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSkill(@PathVariable Integer id) {
+        skillService.deleteSkill(id);
+        return ResponseEntity.noContent().build();
+    }
 }
