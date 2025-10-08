@@ -1,8 +1,8 @@
 package com.amdocs.skillhive.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.time.Instant;
 import java.util.Objects;
 

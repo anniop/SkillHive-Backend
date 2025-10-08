@@ -2,7 +2,7 @@ package com.amdocs.skillhive.service;
 
 import com.amdocs.skillhive.model.Skill;
 import com.amdocs.skillhive.repository.SkillRepository;
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.amdocs.skillhive.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,103 +45,52 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.USER;
 
-    // convenience backrefs
+    // Optional: User skills relation
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserSkill> skills;
 
-    public User() { }
+    public User() {}
 
-    public User(Integer userId,
-                String fullName,
-                String email,
-                String passwordHash,
-                String bio,
-                String location,
-                Instant dateJoined,
-                Role role,
-                Set<UserSkill> skills) {
+    public User(Integer userId, String fullName, String email, String passwordHash,
+                String bio, String location, Instant dateJoined, Role role, Set<UserSkill> skills) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
         this.passwordHash = passwordHash;
         this.bio = bio;
         this.location = location;
-        this.dateJoined = dateJoined == null ? Instant.now() : dateJoined;
-        this.role = role == null ? Role.USER : role;
+        this.dateJoined = dateJoined != null ? dateJoined : Instant.now();
+        this.role = role != null ? role : Role.USER;
         this.skills = skills;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
+    // Getters and setters
+    public Integer getUserId() { return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public String getFullName() {
-        return fullName;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
+    public Instant getDateJoined() { return dateJoined; }
+    public void setDateJoined(Instant dateJoined) { this.dateJoined = dateJoined; }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public Instant getDateJoined() {
-        return dateJoined;
-    }
-
-    public void setDateJoined(Instant dateJoined) {
-        this.dateJoined = dateJoined;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Set<UserSkill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(Set<UserSkill> skills) {
-        this.skills = skills;
-    }
+    public Set<UserSkill> getSkills() { return skills; }
+    public void setSkills(Set<UserSkill> skills) { this.skills = skills; }
 
     @Override
     public boolean equals(Object o) {

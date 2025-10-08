@@ -1,7 +1,7 @@
 package com.amdocs.skillhive.service;
 
 import com.amdocs.skillhive.model.SkillExchangeRequest;
-import com.amdocs.skillhive.model.RequestStatus;
+import com.amdocs.skillhive.model.SkillExchangeRequest.RequestStatus;
 import java.util.List;
 
 public interface SkillExchangeRequestService {
