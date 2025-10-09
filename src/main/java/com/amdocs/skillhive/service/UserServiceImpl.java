@@ -2,6 +2,7 @@ package com.amdocs.skillhive.service;
 
 import com.amdocs.skillhive.model.User;
 import com.amdocs.skillhive.repository.UserRepository;
+import com.amdocs.skillhive.util.PasswordUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new IllegalArgumentException("User payload must not be null");
         }
+
+        String hashedPassword = PasswordUtils.hashPassword(user.getPasswordHash());
+        user.setPasswordHash(hashedPassword);
+
         // Set default role if not provided
         if (user.getRole() == null) {
             // TODO: assign a concrete default role here, e.g.:
